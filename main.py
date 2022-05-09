@@ -1,22 +1,40 @@
-import pygame
-from sys import exit
+from algo import *
+from map import *
 
-pygame.init()
-screen = pygame.display.set_mode((800,400))
-pygame.display.set_caption("Teste")
-clock = pygame.time.Clock()
-textFont = pygame.font.Font(None, 50)
 
-textSurface = textFont.render("ta funcionando", False, 'White')
+def main():
 
-while True:
+    maze = [[0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
+    # map = GetMap()
+    start = (0,0)
+    end = (7,3)
+
+	# print(map)
+	# print(maze)
+
+	# start = GetStart()
+	# end = GetCheckpoints()
+
+    end = (7, 6)
+    print (start, end)
+
+
+    path = astar(maze, start, end)
+
 	
-    screen.blit(textSurface,(250,150))
-    
-    pygame.display.update()
-    clock.tick(60)
+    print(path)
+
+
+if __name__ == '__main__':
+    main()
+
