@@ -15,23 +15,26 @@ def main():
             [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
-    # map = GetMap()
+    #map = GetMap()
     start = (0,0)
     end = (7,3)
 
-	# print(map)
-	# print(maze)
 
-	# start = GetStart()
-	# end = GetCheckpoints()
+    #print("len ",len(map))
+    #print(map)
+    #print('\n')
+    #print(map[1])
+    #print(maze)
 
-    end = (7, 6)
+    #start = GetStart()
+    #end = GetCheckpoints()
+
+    #end = (7, 6)
     print (start, end)
 
 
     path = astar(maze, start, end)
 
-	
     print(path)
 
 
