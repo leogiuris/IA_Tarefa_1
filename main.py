@@ -17,14 +17,14 @@ def main():
 
     #map = GetMap()
     start = (0,0)
-    end = (7,3)
+    end = (3,7)
 
 
     #print("len ",len(map))
     #print(map)
     #print('\n')
     #print(map[1])
-    #print(maze)
+    print('len', len(maze))
 
     #start = GetStart()
     #end = GetCheckpoints()
@@ -35,7 +35,7 @@ def main():
 
     path = astar(maze, start, end)
 
-    print(path)
+    print('caminho', path)
 
 
 if __name__ == '__main__':

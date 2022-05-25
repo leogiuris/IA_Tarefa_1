@@ -11,11 +11,11 @@ class Node:
         self.h = 0
         self.f = 0
 
-    def _eq_(self, other):
+    def __eq__(self, other):
         return self.position == other.position
 
     def __repr__(self):
-        return "("+str(self.position)+")"
+        return str(self.position)
 
 def astar(maze, start, end):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
@@ -34,15 +34,15 @@ def astar(maze, start, end):
     open_list.append(start_node)
 
     # Loop until you find the end
-    counter2 = 0
+    # counter2 = 0
 
     while len(open_list) > 0:
-        counter2=counter2+1
-        if(counter2 >5):
-            break
+        # counter2=counter2+1
+        # if(counter2 >3):
+        #     break
         # Get the current node
         print("open: ", open_list)
-        print("closed: ", closed_list)
+
         current_node = open_list[0]
         current_index = 0
         for index, item in enumerate(open_list):
@@ -54,7 +54,10 @@ def astar(maze, start, end):
         open_list.pop(current_index)
         closed_list.append(current_node)
         
+        print("closed: ", closed_list)
+
         # Found the goal
+        print('current', current_node)
         if current_node == end_node:
             path = []
             current = current_node
@@ -76,7 +79,7 @@ def astar(maze, start, end):
             if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) - 1) or node_position[1] < 0:
                 continue
 
-            # # Make sure walkable terrain
+            # Make sure walkable terrain
             # if maze[node_position[0]][node_position[1]] != 0:
             #     continue
 
@@ -88,13 +91,8 @@ def astar(maze, start, end):
 
         # Loop through children
         for child in children:
-            close = 0 
             # Child is on the closed list
-            for closed_child in closed_list:
-                if child == closed_child:
-                    close = 1 
-                    break
-            if close == 0:
+            if child not in closed_list:
             # Create the f, g, and h values
                 child.g = current_node.g + 1
                 # Manhattan Distance
@@ -105,6 +103,7 @@ def astar(maze, start, end):
                 aberto = 0
                 for open_node in open_list:
                     if child == open_node:
+
                         aberto = 1
                         if child.f < open_node.f:
                             open_node.f = child.f
