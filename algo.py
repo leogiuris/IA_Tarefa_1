@@ -41,7 +41,7 @@ def astar(maze, start, end):
         # if(counter2 >3):
         #     break
         # Get the current node
-        print("open: ", open_list)
+        # print("open: ", open_list)
 
         current_node = open_list[0]
         current_index = 0
@@ -54,10 +54,10 @@ def astar(maze, start, end):
         open_list.pop(current_index)
         closed_list.append(current_node)
         
-        print("closed: ", closed_list)
+        # print("closed: ", closed_list)
 
         # Found the goal
-        print('current', current_node)
+        # print('current', current_node)
         if current_node == end_node:
             path = []
             current = current_node
@@ -80,8 +80,8 @@ def astar(maze, start, end):
                 continue
 
             # Make sure walkable terrain
-            # if maze[node_position[0]][node_position[1]] != 0:
-            #     continue
+            if maze[node_position[0]][node_position[1]] != 0:
+                continue
 
             # Create new node
             new_node = Node(current_node, node_position)
