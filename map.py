@@ -9,7 +9,6 @@ def GetStart():
             if el == '0':
                 return (i,j)
 
-
 # a ideia é pegar todos os checkpoints e passar uma lista de tuplas
 def GetCheckpoints():
     for i,line in enumerate(mapChar):
@@ -26,7 +25,7 @@ def SetCost(val):
 
 
 def GetMap():
-    f = open('MAPA_MENOR.txt','r')
+    f = open('MAPA_LENDA-AANG.txt','r')
     lines = f.read()
     for el in lines.split('\n'):
         if len(el) < 2:
