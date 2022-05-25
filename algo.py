@@ -1,5 +1,5 @@
 from turtle import position
-
+import numpy as np
 class Node:
     """A node class for A* Pathfinding"""
 
@@ -9,6 +9,7 @@ class Node:
 
         self.g = 0
         self.h = 0
+        self.t = 0 # tempo de percurso
         self.f = 0
 
     def __eq__(self, other):
@@ -17,14 +18,37 @@ class Node:
     def __repr__(self):
         return str(self.position)
 
+def time(char):
+    if char == '.':
+        return 1
+    elif char == 'R':
+        return 5
+    elif char == 'V':
+        return 10
+    elif char == 'A':
+        return 15
+    elif char == 'M':
+        return 200
+    return 0
+
+###REVER QUESTAO DE POSICAO (X,Y) (YX)
+def positions_etapas(maze, lista, n):
+    v = np.zeros(n, dtype=object) #python sets for anything for array that way
+    for x in range(len(maze)):
+        for y in range(len(maze[x])):
+            for index, elem in enumerate(lista):
+                if maze[x][y] == elem:
+                    v[index] = (x, y)
+    return v
+
 def astar(maze, start, end):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
 
     # Create start and end node
     start_node = Node(parent=None, position=start)
-    start_node.g = start_node.h = start_node.f = 0
+    start_node.g = start_node.h = start_node.t =start_node.f = 0
     end_node = Node(None, end)
-    end_node.g = end_node.h = end_node.f = 0
+    end_node.g = end_node.h = end_node.t = end_node.f = 0
 
     # Initialize both open and closed list
     open_list = []
@@ -74,16 +98,16 @@ def astar(maze, start, end):
             # Get node position
             node_position = (
                 current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
-
             # Make sure within range
             if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) - 1) or node_position[1] < 0:
                 continue
 
             # Make sure walkable terrain
-            if maze[node_position[0]][node_position[1]] != 0:
-                continue
+            # if maze[node_position[0]][node_position[1]] != 0:
+            #     continue
 
             # Create new node
+        
             new_node = Node(current_node, node_position)
 
             # Append
@@ -96,8 +120,10 @@ def astar(maze, start, end):
             # Create the f, g, and h values
                 child.g = current_node.g + 1
                 # Manhattan Distance
+                child.t = time(maze[node_position[0]][node_position[1]])
                 child.h = (child.position[0] - end_node.position[0]) + (child.position[1] - end_node.position[1])
-                child.f = child.g + child.h
+                child.f = child.g + child.h + child.t
+                
 
             # Child is already in the open list
                 aberto = 0
@@ -109,6 +135,7 @@ def astar(maze, start, end):
                             open_node.f = child.f
                             open_node.g = child.g
                             open_node.h = child.h
+                            open_node.t = child.t
                             open_node.parent = child.parent
                         break
                 if aberto == 0:

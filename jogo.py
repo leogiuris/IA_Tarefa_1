@@ -56,7 +56,7 @@ def drawGrid():
 
 
 
-def main():
+def main_display():
     global display
     pygame.init()
     display = pygame.display.set_mode((WINDOW_HEIGHT, WINDOW_WIDTH))
@@ -70,6 +70,3 @@ def main():
                 pygame.quit()
                 quit()
         pygame.display.update()
-
-        
-main()

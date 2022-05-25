@@ -25,7 +25,7 @@ def SetCost(val):
 
 
 def GetMap():
-    f = open('MAPA_MENOR.txt','r')
+    f = open('MAPA_LENDA-AANG.txt','r')
     lines = f.read()
     for el in lines.split('\n'):
         if len(el) < 2:
