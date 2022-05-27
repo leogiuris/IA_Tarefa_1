@@ -13,3 +13,11 @@ def cria_linha():
         return l
     else:
         return cria_linha()
+    
+def cria_matriz():
+    i=0
+    m=[]
+    while i<30:
+       m.append(cria_linha())
+       i+=1
+    return m
