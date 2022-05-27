@@ -43,3 +43,14 @@ def conserta_8(i,*m):
     j=randint(0,29)
     m[j][i]=0
     return m #necessario checar novamente
+
+#junta as duas funcoes auxiliares e deixa a matriz dentro os parametros esperados
+def conserta_verifica_8(*m):
+    n=checa_8(*m)
+    while n>-1:
+        m=conserta_8(n,*m)
+        n=checa_8(*m)
+    return m
+
+
+
