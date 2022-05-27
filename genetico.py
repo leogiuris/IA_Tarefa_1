@@ -37,3 +37,9 @@ def checa_8(*m):
             return i #retorna indice do que apareceu mais de 8 vezes
         i+=1
     return -1
+
+#escolhe um trajeto ao acaso para tirar o personagem 
+def conserta_8(i,*m):
+    j=randint(0,29)
+    m[j][i]=0
+    return m #necessario checar novamente
