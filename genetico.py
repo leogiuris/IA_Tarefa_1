@@ -6,7 +6,7 @@ def cria_linha():
     i=0
     t=0
     while i<7:
-        n=randint(0,1)
+        n=randint(0,1) # mudar probabilidade!!!!!!!! assim nao funciona
         l.append(n)
         t+=n
         i+=1
