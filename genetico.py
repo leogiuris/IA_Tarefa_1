@@ -50,7 +50,7 @@ def conserta_verifica_8(*m):
     while n>-1:
         m=conserta_8(n,*m)
         n=checa_8(*m)
-    return m
+    return m #necessario checar novamente se nenhum trajeto ficou sem personagens
 
 
 
