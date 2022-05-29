@@ -31,7 +31,6 @@ def time(char):
         return 200
     return 0
 
-###REVER QUESTAO DE POSICAO (X,Y) (YX)
 def positions_etapas(maze, lista, n):
     v = np.zeros(n, dtype=object) #python sets for anything for array that way
     for x in range(len(maze)):
@@ -61,11 +60,6 @@ def astar(maze, start, end):
     # counter2 = 0
 
     while len(open_list) > 0:
-        # counter2=counter2+1
-        # if(counter2 >3):
-        #     break
-        # Get the current node
-        # print("open: ", open_list)
 
         current_node = open_list[0]
         current_index = 0
@@ -101,11 +95,7 @@ def astar(maze, start, end):
             # Make sure within range
             if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) - 1) or node_position[1] < 0:
                 continue
-
-            # Make sure walkable terrain
-            # if maze[node_position[0]][node_position[1]] != 0:
-            #     continue
-
+            
             # Create new node
         
             new_node = Node(current_node, node_position)
