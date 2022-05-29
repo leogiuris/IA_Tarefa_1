@@ -1,5 +1,5 @@
 from random import randint
-
+import numpy as np
 #cria linhas da matriz
 def cria_linha(): 
     l=[]
@@ -41,10 +41,13 @@ def checa_8(*m):
 #escolhe um trajeto ao acaso para tirar o personagem 
 def conserta_8(i,*m):
     j=randint(0,29)
+    while (m[j][i] == 0):
+        j=randint(0,29) # de fato altera o caminho
     m[j][i]=0
     return m 
 
 #junta as duas funcoes auxiliares e deixa a matriz dentro os parametros esperados
+
 def conserta_verifica_8(*m):
     n=checa_8(*m)
     while n>-1:
@@ -52,5 +55,8 @@ def conserta_verifica_8(*m):
         n=checa_8(*m)
     return m #necessario checar novamente se nenhum trajeto ficou sem personagens
 
-
+# custo do tempo a cada etapa: dificuldade/ agilidade na etapa
+def custo_tempo(etapa_dif, personagem_agilidade, matrix_genetica):
+    matrix = np.divide(etapa_dif, np.matmul(matrix_genetica, personagem_agilidade))
+    return np.sum(matrix)
 
