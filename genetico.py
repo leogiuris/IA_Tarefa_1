@@ -100,8 +100,9 @@ def busca(p, lista): # returna indice i em que lista[i-1] < p < lista[i]
 	return 0
 
 def random_selection(population):
-    scores = [custo_tempo(etapa_dif, personagem_agilidade, person) for person in population]
-    probs = np.divide(probs, np.sum(scores))
+    times = [custo_tempo(etapa_dif, personagem_agilidade, person) for person in population]
+    times = np.divide(1, times) 
+    probs = np.divide(probs, np.sum(times)) ## mais provavel, menor tempos
     lista = []
     psum = 0
     n= len(probs)
