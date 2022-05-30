@@ -119,6 +119,7 @@ def random_selection(population):
 def genetic_algorithm(population,n): ## population list of matrices
     for j in range(n):
         new_population = []
+        # evaluate best individual...
         for i in range(len(population)):
             x = random_selection(population)
             y = random_selection(population)
