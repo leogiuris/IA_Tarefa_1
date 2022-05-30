@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, random
 import numpy as np
 #cria linhas da matriz
 def cria_linha(ncols): #ncols = 7
@@ -82,5 +82,47 @@ def custo_tempo(etapa_dif, personagem_agilidade, matrix_genetica):
     matrix = np.divide(etapa_dif, np.matmul(matrix_genetica, personagem_agilidade))
     return np.sum(matrix)
 
-def mutation(parents, num_offspring):
-    return
+
+global etapa_dif
+global personagem_agilidade
+
+def busca(p, lista): # returna indice i em que lista[i-1] < p < lista[i]
+	low = 0
+	high = len(lista) - 1
+	while low <= high:
+		middle = low + (high - low) // 2
+		if lista[middle] >= p and lista[middle-1] < p: # lista[middle-1] < p <= lista[middle]
+			return middle
+		elif lista[middle] <= p:
+			low = middle + 1 
+		else:
+			high = middle - 1
+	return 0
+
+def random_selection(population):
+    scores = [custo_tempo(etapa_dif, personagem_agilidade, person) for person in population]
+    probs = np.divide(probs, np.sum(scores))
+    lista = []
+    psum = 0
+    n= len(probs)
+    for i in range(n):
+        psum += probs[i]
+        lista.append(psum)
+    p = random()
+    j = busca(p, lista)
+    return population[j] 
+    
+def genetic_algorithm(population,n): ## population list of matrices
+    for j in range(n):
+        new_population = []
+        for i in range(len(population)):
+            x = random_selection(population)
+            y = random_selection(population)
+            child = reproduce(x,y)
+            p = random()
+            if (p < 0.01):
+                child = mutate(child)
+            new_population.append(child)
+        population = new_population
+    fit_ind = best_individual(population)
+    return fit_ind
