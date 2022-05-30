@@ -110,7 +110,7 @@ def astar(maze, start, end):
             # Create the f, g, and h values
                 child.g = current_node.g + 1
                 
-                child.t = current_node.time(maze[child.position[0]][child.position[1]])
+                child.t = current_node.t + time(maze[child.position[0]][child.position[1]])
                 # Manhattan Distance
                 child.h = abs(child.position[0] - end_node.position[0]) + abs(child.position[1] - end_node.position[1])
                 child.f = child.g + child.h + child.t

@@ -39,6 +39,7 @@ def checa_k(*m, k):
     return -1
 
 #escolhe um trajeto ao acaso para tirar o personagem 
+# MELHORAR 
 def conserta_k(i,*m):
     j=randint(0,len(m))
     while (m[j][i] == 0):
@@ -56,6 +57,7 @@ def conserta_vazio(*m):
         for i in range(len(m)):
             lista[j] += m[i][j]
     
+    #### ERRO - E SE TODOS FORAM USADOS 8 VEZES E ALGUM PATH ESTÁ VAZIO
     for i in range(len(m)):
         for j in range(cols):
             sum += m[i][j]
@@ -72,6 +74,7 @@ def conserta_verifica_k(*m, k):
         n=checa_k(*m, k)
     return m #necessario checar novamente se nenhum trajeto ficou sem personagens
 
+### ERRO POIS ERRO EM CONSERTA_VAZIO
 def conserta_geral(*m, k):
     m = conserta_verifica_k(*m, k)
     m = conserta_vazio(*m)
@@ -102,7 +105,7 @@ def busca(p, lista): # returna indice i em que lista[i-1] < p < lista[i]
 def random_selection(population):
     times = [custo_tempo(etapa_dif, personagem_agilidade, person) for person in population]
     times = np.divide(1, times) 
-    probs = np.divide(probs, np.sum(times)) ## mais provavel, menor tempos
+    probs = np.divide(times, np.sum(times)) ## mais provavel, menor tempos
     lista = []
     psum = 0
     n= len(probs)
