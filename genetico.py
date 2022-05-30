@@ -83,5 +83,4 @@ def custo_tempo(etapa_dif, personagem_agilidade, matrix_genetica):
     return np.sum(matrix)
 
 def mutation(parents, num_offspring):
-    
     return
