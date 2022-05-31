@@ -1,6 +1,17 @@
 from random import randint, random
+from urllib.parse import _NetlocResultMixinBytes
 import numpy as np
 #cria linhas da matriz
+
+
+etapa_dif = []
+for i in range(1,32):
+    etapa_dif.append(10*i)
+personagem_agilidade = [1.8, 1.6, 1.6, 1.6, 1.4, 0.9, 0.7]
+nlines = 31
+ncols = 7
+k = 8
+
 def cria_linha(ncols): #ncols = 7
     l=[]
     i=0
@@ -23,6 +34,49 @@ def cria_matriz(nlines, ncols): # nlines=30, ncols = 8
        m.append(cria_linha(ncols))
        i+=1
     return m
+
+#new cria matrix
+
+def cria_novo_line(ncols, k):
+    ltot = 0
+    line = np.zeros(ncols)
+    while ltot < k:
+        n = randint(0,ncols-1)
+        if line[n] != 1:
+            line[n] = 1
+            ltot += 1
+    return line
+        
+# cada linha com k 1's
+# cria matrix
+def checa_vazio(*m):    
+    for i in range(len(m)):
+        sum = m[i].sum()
+        if sum == 0:
+            return i
+    return -1
+
+def cria_novo_matrix(nlines, ncols, k):
+    m=np.zeros((nlines, ncols))
+    for i in range(ncols):
+      ltot = 0
+      while ltot < k:
+         n = randint(0,nlines-1)
+         if m[n][i] != 1:
+               m[n][i] = 1
+               ltot += 1
+    index = checa_vazio(*m)
+    while index != -1:
+        n = randint(0,ncols-1)
+        m[index][n] = 1
+        s = -1
+        ## atualizar matrix pois agora tem mais de k 1's na coluna
+        k = randint(0, nlines-1)
+        while m[k][n]== 0:
+            k = randint(0, nlines-1)
+        m[k][n] = 0
+        index = checa_vazio(*m)
+    return m 
 
 #checa se alguem foi usado mais que k vezes
 def checa_k(*m, k):
@@ -80,14 +134,13 @@ def conserta_geral(*m, k):
     m = conserta_vazio(*m)
     return m
 
+
 # custo do tempo a cada etapa: dificuldade/ agilidade na etapa
 def custo_tempo(etapa_dif, personagem_agilidade, matrix_genetica):
     matrix = np.divide(etapa_dif, np.matmul(matrix_genetica, personagem_agilidade))
     return np.sum(matrix)
 
 
-global etapa_dif
-global personagem_agilidade
 
 def busca(p, lista): # returna indice i em que lista[i-1] < p < lista[i]
 	low = 0
@@ -115,8 +168,55 @@ def random_selection(population):
     p = random()
     j = busca(p, lista)
     return population[j] 
+
+
+def reproduce(x,y):
+    ## CUT THE COLUMNS
+
+    m = np.zeros((nlines, ncols))
+    m[:, 0:3] = x[:, 0:3]
+    m[:, 3:8] = y[:, 3:8]
+    n = np.zeros((nlines, ncols))
+    n[:, 0:3] = x[:, 0:3]
+    n[:, 3:8] = y[:, 3:8]
+    if checa_vazio(m) == -1:
+        if checa_vazio(n) == -1:
+            a = custo_tempo(etapa_dif, personagem_agilidade, m)
+            b = custo_tempo(etapa_dif, personagem_agilidade, n)
+            if a < b:
+                return m
+            else:
+                return n
+        else:
+            return m
+    else:
+        if checa_vazio(n) == -1:
+            return n
+        else:
+            # no child available
+            # conserta?
+            # send parents?
+            # a = custo_tempo(etapa_dif, personagem_agilidade, x)
+            # b = custo_tempo(etapa_dif, personagem_agilidade, y)
+            # if (a < b):
+            #     return x
+            # return y
+            return -1
     
+
+def best_individual(population):
+    times = [custo_tempo(etapa_dif, personagem_agilidade, person) for person in population]    
+    best_time = times[0]
+    index = 0
+    for i in range(1, len(times)):
+        if times[i] < best_time:
+            best_time = times[i]
+            index = i
+    return best_time, population[index]
+        
 def genetic_algorithm(population,n): ## population list of matrices
+    best_time, fit_ind = best_individual(population)
+    print('best_time', best_time)
     for j in range(n):
         new_population = []
         # evaluate best individual...
@@ -124,10 +224,17 @@ def genetic_algorithm(population,n): ## population list of matrices
             x = random_selection(population)
             y = random_selection(population)
             child = reproduce(x,y)
-            p = random()
-            if (p < 0.01):
-                child = mutate(child)
-            new_population.append(child)
+            # p = random()
+            # if (p < 0.01):
+            #     child = mutate(child)
+            if isinstance(child, int):
+                new_population.append(child)
+        print('new pop', len(new_population))
         population = new_population
-    fit_ind = best_individual(population)
+        time, ind = best_individual(population)
+        if time < best_time:
+            best_time = time
+            fit_ind = ind
+            print('time', time)
+            print('best_time', best_time)
     return fit_ind
