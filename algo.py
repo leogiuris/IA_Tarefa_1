@@ -1,5 +1,7 @@
-from turtle import position
 import numpy as np
+
+TIME = 0
+
 class Node:
     """A node class for A* Pathfinding"""
 
@@ -77,6 +79,10 @@ def astar(maze, start, end):
         # Found the goal
         # print('current', current_node)
         if current_node == end_node:
+            global TIME
+            TIME += current_node.t
+            print('TIME', TIME)
+            print('CURRENT NODE', current_node.t)
             path = []
             current = current_node
             while current is not None:
