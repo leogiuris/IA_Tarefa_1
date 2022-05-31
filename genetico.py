@@ -2,6 +2,7 @@ from random import randint, random
 from urllib.parse import _NetlocResultMixinBytes
 import numpy as np
 #cria linhas da matriz
+from copy import deepcopy
 
 
 etapa_dif = []
@@ -169,39 +170,87 @@ def random_selection(population):
     j = busca(p, lista)
     return population[j] 
 
+def bits(n):
+    bits = [] 
+    while n > 0:
+        r = n%2
+        n = n//2
+        bits.append(r)
+    return bits
 
-def reproduce(x,y):
-    ## CUT THE COLUMNS
+# assume que soma resultado vai a no maximo n '1s
+def soma_bits(a,b, n ):
+    r = a+b
+    for i in range(n-1):
+        if r[i] == 2:
+            r[i] = 0
+            r[i+1] +=1
+    return r
 
-    m = np.zeros((nlines, ncols))
-    m[:, 0:3] = x[:, 0:3]
-    m[:, 3:8] = y[:, 3:8]
-    n = np.zeros((nlines, ncols))
-    n[:, 0:3] = x[:, 0:3]
-    n[:, 3:8] = y[:, 3:8]
-    if checa_vazio(m) == -1:
-        if checa_vazio(n) == -1:
-            a = custo_tempo(etapa_dif, personagem_agilidade, m)
-            b = custo_tempo(etapa_dif, personagem_agilidade, n)
-            if a < b:
-                return m
-            else:
-                return n
-        else:
-            return m
-    else:
-        if checa_vazio(n) == -1:
-            return n
-        else:
-            # no child available
-            # conserta?
-            # send parents?
-            # a = custo_tempo(etapa_dif, personagem_agilidade, x)
-            # b = custo_tempo(etapa_dif, personagem_agilidade, y)
-            # if (a < b):
-            #     return x
-            # return y
-            return -1
+def reproduce1(x,y, n): 
+    tuplas = []
+    for line in range(nlines):
+        for col in range(ncols):
+            if x[line][col] != y[line][col]:
+                tuplas.append((line, col))
+
+    casas_sorteadas = []
+    for i in range(n):
+        num = randint(0, len(tuplas)-1)
+        casas_sorteadas.append(tuplas[num])
+        tuplas.pop(i)
+    
+    ## np.array
+    childs = [x, y]
+    bits = np.array([1,0,0,0])
+    m = deepcopy(x)
+    n = pow(2,n)
+    for i in range(n-1): ## criancas podem ser x e y
+        matrix = deepcopy(m)
+        for j in range(n):
+            # percorrer bits
+            if bits[j] == 1:
+                a = casas_sorteadas[j][0]
+                b = casas_sorteadas[j][1]
+                matrix[a][b] = y[a][b]
+        um = np.array([1,0,0,0])
+        bits = soma_bits(bits, um, n)
+        if checa_k(*matrix) == -1 and checa_vazio(*matrix) == -1:
+            childs.append(matrix)
+    return childs
+
+# def reproduce(x,y):
+#     ## CUT THE COLUMNS
+
+#     m = np.zeros((nlines, ncols))
+#     m[:, 0:3] = x[:, 0:3]
+#     m[:, 3:8] = y[:, 3:8]
+#     n = np.zeros((nlines, ncols))
+#     n[:, 0:3] = x[:, 0:3]
+#     n[:, 3:8] = y[:, 3:8]
+#     if checa_vazio(m) == -1:
+#         if checa_vazio(n) == -1:
+#             a = custo_tempo(etapa_dif, personagem_agilidade, m)
+#             b = custo_tempo(etapa_dif, personagem_agilidade, n)
+#             if a < b:
+#                 return m
+#             else:
+#                 return n
+#         else:
+#             return m
+#     else:
+#         if checa_vazio(n) == -1:
+#             return n
+#         else:
+#             # no child available
+#             # conserta?
+#             # send parents?
+#             # a = custo_tempo(etapa_dif, personagem_agilidade, x)
+#             # b = custo_tempo(etapa_dif, personagem_agilidade, y)
+#             # if (a < b):
+#             #     return x
+#             # return y
+            # return -1
     
 
 def best_individual(population):
@@ -218,23 +267,25 @@ def genetic_algorithm(population,n): ## population list of matrices
     best_time, fit_ind = best_individual(population)
     print('best_time', best_time)
     for j in range(n):
-        new_population = []
-        # evaluate best individual...
-        for i in range(len(population)):
-            x = random_selection(population)
-            y = random_selection(population)
-            child = reproduce(x,y)
-            # p = random()
-            # if (p < 0.01):
-            #     child = mutate(child)
-            if isinstance(child, int):
-                new_population.append(child)
-        print('new pop', len(new_population))
-        population = new_population
-        time, ind = best_individual(population)
-        if time < best_time:
-            best_time = time
-            fit_ind = ind
-            print('time', time)
-            print('best_time', best_time)
+        # while len(population) < 1000: ## tamanho pop
+        # ideia tirar caras ruins
+            new_population = []
+            # evaluate best individual...
+            for i in range(len(population)):
+                x = random_selection(population)
+                y = random_selection(population)
+                childs = reproduce1(x,y)
+                for child in childs:
+                    new_population.append(child)
+                # p = random()
+                # if (p < 0.01):
+                #     child = mutate(child)
+            print('new pop', len(new_population))
+            population = new_population
+            time, ind = best_individual(population)
+            if time < best_time:
+                best_time = time
+                fit_ind = ind
+                print('time', time)
+                print('best_time', best_time)
     return fit_ind
