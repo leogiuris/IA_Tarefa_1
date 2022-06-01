@@ -13,29 +13,6 @@ for i in range(1,32):
 personagem_agilidade = [1.8, 1.6, 1.6, 1.6, 1.4, 0.9, 0.7]
 k = 8
 
-def cria_linha():
-    l=[]
-    i=0
-    t=0
-    while i < NUM_COLUMNS:
-        n=randint(0,1) # mudar probabilidade!!!!!!!! assim nao funciona
-        l.append(n)
-        t+=n
-        i+=1
-    if t: # checa se pelo menos um membro percorreu o percurso
-        return l
-    else:
-        return cria_linha(NUM_COLUMNS)
-   
-#cria matriz [30][7]
-def cria_matriz_velho():
-    i=0
-    m=[]
-    while i < NUM_LINES:
-       m.append(cria_linha())
-       i+=1
-    return m
-
 #new cria matrix
 def cria_matriz():
     m=np.zero(NUM_LINES, NUM_COLUMNS)
@@ -149,13 +126,10 @@ def conserta_geral(*m, k):
     m = conserta_vazio(*m)
     return m
 
-
 # custo do tempo a cada etapa: dificuldade/ agilidade na etapa
 def custo_tempo(etapa_dif, personagem_agilidade, matrix_genetica):
     matrix = np.divide(etapa_dif, np.matmul(matrix_genetica, personagem_agilidade))
     return np.sum(matrix)
-
-
 
 def busca(p, lista): # returna indice i em que lista[i-1] < p < lista[i]
 	low = 0
@@ -315,3 +289,26 @@ def genetic_algorithm(population,n): ## population list of matrices
                 print('time', time)
                 print('best_time', best_time)
     return fit_ind
+
+# def cria_linha():
+#     l=[]
+#     i=0
+#     t=0
+#     while i < NUM_COLUMNS:
+#         n=randint(0,1) # mudar probabilidade!!!!!!!! assim nao funciona
+#         l.append(n)
+#         t+=n
+#         i+=1
+#     if t: # checa se pelo menos um membro percorreu o percurso
+#         return l
+#     else:
+#         return cria_linha(NUM_COLUMNS)
+   
+# #cria matriz [30][7]
+# def cria_matriz_velho():
+#     i=0
+#     m=[]
+#     while i < NUM_LINES:
+#        m.append(cria_linha())
+#        i+=1
+#     return m
