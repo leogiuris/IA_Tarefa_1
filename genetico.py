@@ -4,45 +4,36 @@ import numpy as np
 #cria linhas da matriz
 from copy import deepcopy
 
+NUM_LINES = 31
+NUM_COLUMNS = 7
 
 etapa_dif = []
 for i in range(1,32):
     etapa_dif.append(10*i)
 personagem_agilidade = [1.8, 1.6, 1.6, 1.6, 1.4, 0.9, 0.7]
-nlines = 31
-ncols = 7
 k = 8
 
-def cria_linha(ncols): #ncols = 7
-    l=[]
-    i=0
-    t=0
-    while i<ncols:
-        n=randint(0,1) # mudar probabilidade!!!!!!!! assim nao funciona
-        l.append(n)
-        t+=n
-        i+=1
-    if t:#checa se pelo menos um membro percorreu o percurso
-        return l
-    else:
-        return cria_linha(ncols)
-   
-#cria matriz [30][7]
-def cria_matriz(nlines, ncols): # nlines=30, ncols = 8
-    i=0
-    m=[]
-    while i<nlines:
-       m.append(cria_linha(ncols))
-       i+=1
-    return m
-
 #new cria matrix
+def cria_matriz():
+    m=np.zero(NUM_LINES, NUM_COLUMNS)
+    final=randint(0, NUM_COLUMNS) #definir momo
+    n=8
+    for i in range(NUM_COLUMNS):
+        if i==final:
+            n=7
+        for num in range(n):
+            l=randint(0, NUM_LINES) 
+            m[l,i]=1
+    if checa_vazio(*m)!=-1:#checa se pelo menos um membro percorreu o percurso
+        return cria_matriz(NUM_LINES, NUM_COLUMNS)
+    else:
+        return m
 
-def cria_novo_line(ncols, k):
+def cria_novo_line():
     ltot = 0
-    line = np.zeros(ncols)
+    line = np.zeros(NUM_COLUMNS)
     while ltot < k:
-        n = randint(0,ncols-1)
+        n = randint(0, NUM_COLUMNS - 1)
         if line[n] != 1:
             line[n] = 1
             ltot += 1
@@ -57,26 +48,28 @@ def checa_vazio(*m):
             return i
     return -1
 
-def cria_novo_matrix(nlines, ncols, k):
-    m=np.zeros((nlines, ncols))
-    vivo = randint(0, ncols-1)
-    for i in range(ncols):
+
+
+def cria_novo_matrix(k):
+    m=np.zeros((NUM_LINES, NUM_COLUMNS))
+    vivo = randint(0, NUM_COLUMNS-1)
+    for i in range(NUM_COLUMNS):
       ltot = 0
       if i == vivo:
           ltot = 1 ## i irá sobreviver
       while ltot < k:
-         n = randint(0,nlines-1)
+         n = randint(0, NUM_LINES - 1)
          if m[n][i] != 1:
                m[n][i] = 1
                ltot += 1
     index = checa_vazio(*m)
     while index != -1:
-        n = randint(0,ncols-1)
+        n = randint(0, NUM_COLUMNS - 1)
         m[index][n] = 1
         ## atualizar matrix pois agora tem mais de k 1's na coluna
-        k = randint(0, nlines-1)
+        k = randint(0, NUM_LINES - 1)
         while m[k][n]== 0:
-            k = randint(0, nlines-1)
+            k = randint(0, NUM_LINES - 1)
         m[k][n] = 0
         index = checa_vazio(*m)
     return m 
@@ -154,13 +147,10 @@ def conserta_geral(*m, k):
     m = conserta_vazio(*m)
     return m
 
-
 # custo do tempo a cada etapa: dificuldade/ agilidade na etapa
 def custo_tempo(etapa_dif, personagem_agilidade, matrix_genetica):
     matrix = np.divide(etapa_dif, np.matmul(matrix_genetica, personagem_agilidade))
     return np.sum(matrix)
-
-
 
 def busca(p, lista): # returna indice i em que lista[i-1] < p < lista[i]
 	low = 0
@@ -211,8 +201,8 @@ def soma_bits(a,b, n ):
 def reproduce1(x,y): 
     # x = (person, time)
     tuplas = []
-    for line in range(nlines):
-        for col in range(ncols):
+    for line in range(NUM_LINES):
+        for col in range(NUM_COLUMNS):
             if x[0][line][col] != y[0][line][col]:
                 tuplas.append((line, col))
     casas_sorteadas = []
@@ -221,7 +211,7 @@ def reproduce1(x,y):
         num = randint(0, len(tuplas)-1)
         casas_sorteadas.append(tuplas[num])
         tuplas.pop(num)
-    childs = [x, y]
+        childs = [x, y]
     bits = np.zeros(n)
     bits[0] = 1
     m = deepcopy(x[0])
@@ -242,13 +232,29 @@ def reproduce1(x,y):
             childs.append((matrix, time))
     return childs
 
+
+def reproduce_versaox(*mae,*pai):
+    m = np.zeros(NUM_LINES, NUM_COLUMNS)
+    for i in range (NUM_COLUMNS):
+        if randint(0,1):
+           m[:i]=mae[:i]
+        else:
+            m[:i]=pai[:i]
+    if checa_vazio(*m) != -1:
+        return reproduce(*mae,*pai)
+    else:
+        return m
+    
+    ## np.array
+  
+
 # def reproduce(x,y):
 #     ## CUT THE COLUMNS
 
-#     m = np.zeros((nlines, ncols))
+#     m = np.zeros((NUM_LINES, NUM_COLUMNS))
 #     m[:, 0:3] = x[:, 0:3]
 #     m[:, 3:8] = y[:, 3:8]
-#     n = np.zeros((nlines, ncols))
+#     n = np.zeros((NUM_LINES, NUM_COLUMNS))
 #     n[:, 0:3] = x[:, 0:3]
 #     n[:, 3:8] = y[:, 3:8]
 #     if checa_vazio(m) == -1:
