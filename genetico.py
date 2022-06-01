@@ -215,7 +215,7 @@ def reproduce1(x,y, n):
         tuplas.pop(i)
 	
 def reproduce_versaox(*mae,*pai):
-    m = np.zeros(nlines, ncols)
+    m = np.zeros(nlines, ncols)#usar define para essas variaveis?
     for i in range (ncols):
         if randint(0,1):
            m[:i]=mae[:i]
