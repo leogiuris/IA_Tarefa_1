@@ -211,7 +211,7 @@ def reproduce1(x,y):
         num = randint(0, len(tuplas)-1)
         casas_sorteadas.append(tuplas[num])
         tuplas.pop(num)
-        childs = [x, y]
+    childs = [x, y]
     bits = np.zeros(n)
     bits[0] = 1
     m = deepcopy(x[0])
@@ -233,7 +233,7 @@ def reproduce1(x,y):
     return childs
 
 
-def reproduce_versaox(*mae,*pai):
+def reproduce_versaox(mae,pai):
     m = np.zeros(NUM_LINES, NUM_COLUMNS)
     for i in range (NUM_COLUMNS):
         if randint(0,1):
@@ -241,11 +241,11 @@ def reproduce_versaox(*mae,*pai):
         else:
             m[:i]=pai[:i]
     if checa_vazio(*m) != -1:
-        return reproduce(*mae,*pai)
+        return reproduce_versaox(mae,pai)
     else:
         return m
     
-    ## np.array
+    # np.array
   
 
 # def reproduce(x,y):
