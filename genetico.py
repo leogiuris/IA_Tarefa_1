@@ -59,8 +59,11 @@ def checa_vazio(*m):
 
 def cria_novo_matrix(nlines, ncols, k):
     m=np.zeros((nlines, ncols))
+    vivo = randint(0, ncols-1)
     for i in range(ncols):
       ltot = 0
+      if i == vivo:
+          ltot = 1 ## i irá sobreviver
       while ltot < k:
          n = randint(0,nlines-1)
          if m[n][i] != 1:
@@ -70,7 +73,6 @@ def cria_novo_matrix(nlines, ncols, k):
     while index != -1:
         n = randint(0,ncols-1)
         m[index][n] = 1
-        s = -1
         ## atualizar matrix pois agora tem mais de k 1's na coluna
         k = randint(0, nlines-1)
         while m[k][n]== 0:
@@ -78,6 +80,23 @@ def cria_novo_matrix(nlines, ncols, k):
         m[k][n] = 0
         index = checa_vazio(*m)
     return m 
+
+#checa se alguem foi usado mais que k vezes
+def checa_k_vivo(*m):
+    alive = 0
+    for i in range(len(m[0])):
+        t=0
+        for j in range(len(m)):
+            t+=(m[j][i])
+            # j+=1z
+        alive += t
+        if t>k:
+            return i #retorna indice do que apareceu mais de k vezes
+    if alive >= k*len(m[0]):
+        return -2
+            
+        # i+=1
+    return -1
 
 #checa se alguem foi usado mais que k vezes
 def checa_k(*m, k):
@@ -157,7 +176,9 @@ def busca(p, lista): # returna indice i em que lista[i-1] < p < lista[i]
 	return 0
 
 def random_selection(population):
-    times = [custo_tempo(etapa_dif, personagem_agilidade, person) for person in population]
+    times = list()
+    for person in population:
+        times.append(person[1])
     times = np.divide(1, times) 
     probs = np.divide(times, np.sum(times)) ## mais provavel, menor tempos
     lista = []
@@ -168,7 +189,7 @@ def random_selection(population):
         lista.append(psum)
     p = random()
     j = busca(p, lista)
-    return population[j] 
+    return population[j] # (person, time)
 
 def bits(n):
     bits = [] 
@@ -187,36 +208,38 @@ def soma_bits(a,b, n ):
             r[i+1] +=1
     return r
 
-def reproduce1(x,y, n): 
+def reproduce1(x,y): 
+    # x = (person, time)
     tuplas = []
     for line in range(nlines):
         for col in range(ncols):
-            if x[line][col] != y[line][col]:
+            if x[0][line][col] != y[0][line][col]:
                 tuplas.append((line, col))
-
     casas_sorteadas = []
+    n = min(5, len(tuplas))
     for i in range(n):
         num = randint(0, len(tuplas)-1)
         casas_sorteadas.append(tuplas[num])
-        tuplas.pop(i)
-    
-    ## np.array
+        tuplas.pop(num)
     childs = [x, y]
-    bits = np.array([1,0,0,0])
-    m = deepcopy(x)
-    n = pow(2,n)
-    for i in range(n-1): ## criancas podem ser x e y
+    bits = np.zeros(n)
+    bits[0] = 1
+    m = deepcopy(x[0])
+    l = pow(2,n)
+    for i in range(l-1): ## criancas podem ser x e y
         matrix = deepcopy(m)
         for j in range(n):
             # percorrer bits
             if bits[j] == 1:
                 a = casas_sorteadas[j][0]
                 b = casas_sorteadas[j][1]
-                matrix[a][b] = y[a][b]
-        um = np.array([1,0,0,0])
+                matrix[a][b] = y[0][a][b]
+        um = np.zeros(n)
+        um[0] = 1
         bits = soma_bits(bits, um, n)
-        if checa_k(*matrix) == -1 and checa_vazio(*matrix) == -1:
-            childs.append(matrix)
+        if checa_k_vivo(*matrix) == -1 and checa_vazio(*matrix) == -1:
+            time = custo_tempo(etapa_dif, personagem_agilidade, matrix)
+            childs.append((matrix, time))
     return childs
 
 # def reproduce(x,y):
@@ -254,38 +277,60 @@ def reproduce1(x,y, n):
     
 
 def best_individual(population):
-    times = [custo_tempo(etapa_dif, personagem_agilidade, person) for person in population]    
-    best_time = times[0]
-    index = 0
-    for i in range(1, len(times)):
-        if times[i] < best_time:
-            best_time = times[i]
-            index = i
-    return best_time, population[index]
-        
-def genetic_algorithm(population,n): ## population list of matrices
+    population.sort(key=lambda y: y[1]) #sort by time
+    best_time = population[0][1]
+    best_person = population[0][0]
+    return best_time, best_person
+
+def die(population, max):
+    tam = len(population)
+    excess = tam - max
+    # tupla (child, time)
+    population.sort(key=lambda y: y[1])
+    for i in range(1,excess+1):
+        population.pop(tam-i)
+    # return population
+
+def repetition(population, potential_child):
+    for child in population:
+        if np.array_equal(child[0], potential_child[0]):
+            return 1
+    return 0
+
+def genetic_algorithm(population): ## population list of matrices
     best_time, fit_ind = best_individual(population)
     print('best_time', best_time)
-    for j in range(n):
-        # while len(population) < 1000: ## tamanho pop
-        # ideia tirar caras ruins
-            new_population = []
-            # evaluate best individual...
-            for i in range(len(population)):
-                x = random_selection(population)
+    count = 0
+    while count < 50:
+    ## tamanho pop
+    # ideia tirar caras ruins
+        new_population = []
+        # evaluate best individual...
+        for i in range(100):
+            x = random_selection(population) # (person, time)
+            y = random_selection(population)
+            while np.array_equal(x[0],y[0]):
                 y = random_selection(population)
-                childs = reproduce1(x,y)
-                for child in childs:
+            childs = reproduce1(x,y)
+            for child in childs:
+                if repetition(new_population, child) == 0:
                     new_population.append(child)
-                # p = random()
-                # if (p < 0.01):
-                #     child = mutate(child)
-            print('new pop', len(new_population))
-            population = new_population
-            time, ind = best_individual(population)
-            if time < best_time:
-                best_time = time
-                fit_ind = ind
-                print('time', time)
-                print('best_time', best_time)
+            # p = random()
+            # if (p < 0.01):
+            #     child = mutate(child)
+        population = new_population
+        print('new pop', len(population))
+        if len(population) > 10000:
+            die(population, 10000)
+            print('new pop after massive deaths', len(population))
+        
+        time, ind = best_individual(population)
+        if time < best_time:
+            best_time = time
+            fit_ind = ind
+            print('time', time)
+            print('best_time', best_time)
+        else:
+            count += 1
+            
     return fit_ind
