@@ -4,59 +4,59 @@ import numpy as np
 #cria linhas da matriz
 from copy import deepcopy
 
+NUM_LINES = 31
+NUM_COLUMNS = 7
 
 etapa_dif = []
 for i in range(1,32):
     etapa_dif.append(10*i)
 personagem_agilidade = [1.8, 1.6, 1.6, 1.6, 1.4, 0.9, 0.7]
-nlines = 31
-ncols = 7
 k = 8
 
-def cria_linha(ncols): #ncols = 7
+def cria_linha():
     l=[]
     i=0
     t=0
-    while i<ncols:
+    while i < NUM_COLUMNS:
         n=randint(0,1) # mudar probabilidade!!!!!!!! assim nao funciona
         l.append(n)
         t+=n
         i+=1
-    if t:#checa se pelo menos um membro percorreu o percurso
+    if t: # checa se pelo menos um membro percorreu o percurso
         return l
     else:
-        return cria_linha(ncols)
+        return cria_linha(NUM_COLUMNS)
    
 #cria matriz [30][7]
-def cria_matriz_velho(nlines, ncols): # nlines=30, ncols = 8
+def cria_matriz_velho():
     i=0
     m=[]
-    while i<nlines:
-       m.append(cria_linha(ncols))
+    while i < NUM_LINES:
+       m.append(cria_linha())
        i+=1
     return m
 
 #new cria matrix
-def cria_matriz(nlines,ncols): #ncols = 7
-    m=np.zero(nlines,ncols)
-    final=randint(0,ncols) #definir momo
+def cria_matriz():
+    m=np.zero(NUM_LINES, NUM_COLUMNS)
+    final=randint(0, NUM_COLUMNS) #definir momo
     n=8
-    for i in range (ncols):
+    for i in range(NUM_COLUMNS):
         if i==final:
             n=7
         for num in range(n):
-            l=randint(0,nlines) 
+            l=randint(0, NUM_LINES) 
             m[l,i]=1
     if checa_vazio(*m)!=-1:#checa se pelo menos um membro percorreu o percurso
-        return cria_matriz(nlines,ncols)
+        return cria_matriz(NUM_LINES, NUM_COLUMNS)
     else:
         return m
 
-def cria_novo_line(ncols, k):
+def cria_novo_line():
     ltot = 0
-    line = np.zeros(ncols)
+    line = np.zeros(NUM_COLUMNS)
     while ltot < k:
-        n = randint(0,ncols-1)
+        n = randint(0, NUM_COLUMNS - 1)
         if line[n] != 1:
             line[n] = 1
             ltot += 1
@@ -71,24 +71,24 @@ def checa_vazio(*m):
             return i
     return -1
 
-def cria_novo_matrix(nlines, ncols, k):
-    m=np.zeros((nlines, ncols))
-    for i in range(ncols):
+def cria_novo_matrix(k):
+    m=np.zeros((NUM_LINES, NUM_COLUMNS))
+    for i in range(NUM_COLUMNS):
       ltot = 0
       while ltot < k:
-         n = randint(0,nlines-1)
+         n = randint(0, NUM_LINES - 1)
          if m[n][i] != 1:
                m[n][i] = 1
                ltot += 1
     index = checa_vazio(*m)
     while index != -1:
-        n = randint(0,ncols-1)
+        n = randint(0, NUM_COLUMNS - 1)
         m[index][n] = 1
         s = -1
         ## atualizar matrix pois agora tem mais de k 1's na coluna
-        k = randint(0, nlines-1)
+        k = randint(0, NUM_LINES - 1)
         while m[k][n]== 0:
-            k = randint(0, nlines-1)
+            k = randint(0, NUM_LINES - 1)
         m[k][n] = 0
         index = checa_vazio(*m)
     return m 
@@ -203,8 +203,8 @@ def soma_bits(a,b, n ):
 
 def reproduce1(x,y, n): 
     tuplas = []
-    for line in range(nlines):
-        for col in range(ncols):
+    for line in range(NUM_LINES):
+        for col in range(NUM_COLUMNS):
             if x[line][col] != y[line][col]:
                 tuplas.append((line, col))
 
@@ -215,8 +215,8 @@ def reproduce1(x,y, n):
         tuplas.pop(i)
 	
 def reproduce_versaox(*mae,*pai):
-    m = np.zeros(nlines, ncols)#usar define para essas variaveis?
-    for i in range (ncols):
+    m = np.zeros(NUM_LINES, NUM_COLUMNS)
+    for i in range (NUM_COLUMNS):
         if randint(0,1):
            m[:i]=mae[:i]
         else:
@@ -248,10 +248,10 @@ def reproduce_versaox(*mae,*pai):
 # def reproduce(x,y):
 #     ## CUT THE COLUMNS
 
-#     m = np.zeros((nlines, ncols))
+#     m = np.zeros((NUM_LINES, NUM_COLUMNS))
 #     m[:, 0:3] = x[:, 0:3]
 #     m[:, 3:8] = y[:, 3:8]
-#     n = np.zeros((nlines, ncols))
+#     n = np.zeros((NUM_LINES, NUM_COLUMNS))
 #     n[:, 0:3] = x[:, 0:3]
 #     n[:, 3:8] = y[:, 3:8]
 #     if checa_vazio(m) == -1:
