@@ -28,7 +28,7 @@ def cria_linha(ncols): #ncols = 7
         return cria_linha(ncols)
    
 #cria matriz [30][7]
-def cria_matriz(nlines, ncols): # nlines=30, ncols = 8
+def cria_matriz_velho(nlines, ncols): # nlines=30, ncols = 8
     i=0
     m=[]
     while i<nlines:
@@ -37,6 +37,20 @@ def cria_matriz(nlines, ncols): # nlines=30, ncols = 8
     return m
 
 #new cria matrix
+def cria_matriz(nlines,ncols): #ncols = 7
+    m=np.zero(nlines,ncols)
+    final=randint(0,ncols) #definir momo
+    n=8
+    for i in range (ncols):
+        if i==final:
+            n=7
+        for num in range(n):
+            l=randint(0,nlines) 
+            m[l,i]=1
+    if checa_vazio(*m)!=-1:#checa se pelo menos um membro percorreu o percurso
+        return cria_matriz(nlines,ncols)
+    else:
+        return m
 
 def cria_novo_line(ncols, k):
     ltot = 0
@@ -199,6 +213,18 @@ def reproduce1(x,y, n):
         num = randint(0, len(tuplas)-1)
         casas_sorteadas.append(tuplas[num])
         tuplas.pop(i)
+	
+def reproduce_versaox(*mae,*pai):
+    m = np.zeros(nlines, ncols)
+    for i in range (ncols):
+        if randint(0,1):
+           m[:i]=mae[:i]
+        else:
+            m[:i]=pai[:i]
+    if checa_vazio(*m) != -1:
+        return reproduce(*mae,*pai)
+    else:
+        return m
     
     ## np.array
     childs = [x, y]
