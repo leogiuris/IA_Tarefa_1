@@ -26,7 +26,7 @@ def main():
         path = astar(map, check_points[i], check_points[i+1])
         print('caminho', i)
         print(path)
-
+    global TIME
     print(TIME)
 
 if __name__ == '__main__':

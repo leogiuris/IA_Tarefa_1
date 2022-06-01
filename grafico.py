@@ -2,6 +2,7 @@ import pygame
 import math
 from queue import PriorityQueue
 
+
 WIDTH = 800
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
 pygame.display.set_caption("A* Path Finding Algorithm")
@@ -16,6 +17,16 @@ PURPLE = (128, 0, 128)
 ORANGE = (255, 165 ,0)
 GREY = (128, 128, 128)
 TURQUOISE = (64, 224, 208)
+def GetMap():
+    mapChar = []
+    f = open('MAPA_LENDA-AANG.txt','r')
+    lines = f.read().splitlines()
+    for line in lines:
+        lista = []
+        for char in line:
+            lista.append(char)
+        mapChar.append(lista)
+    return mapChar
 
 class Spot:
 	def __init__(self, row, col, width, total_rows):
@@ -189,8 +200,11 @@ def get_clicked_pos(pos, rows, width):
 
 
 def main(win, width):
-	ROWS = 50
-	grid = make_grid(ROWS, width)
+	map = GetMap()
+
+	ROWS = len(map)
+	# width = len(map[0])
+	grid = make_grid(4,3)
 
 	start = None
 	end = None

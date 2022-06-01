@@ -5,7 +5,7 @@ import pygame
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
 WINDOW_HEIGHT = 800
-WINDOW_WIDTH = 400
+WINDOW_WIDTH =800
 
 def GetMap():
     mapChar = []
@@ -70,3 +70,4 @@ def main_display():
                 pygame.quit()
                 quit()
         pygame.display.update()
+main_display()

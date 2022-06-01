@@ -1,7 +1,7 @@
 import numpy as np
 from random import random, randint
 
-NUM_LINES = 30
+NUM_LINES = 31
 NUM_COLUMNS = 7
 ENERGY = 8
 etapa_dif = []
@@ -116,7 +116,7 @@ def reproduce(mae, pai):
            m[:, i]=mae[:, i]
         else:
             m[:, i]=pai[:, i]
-    if checa_vazio(*m) != -1: 
+    if checa_vazio(m) != -1: 
         return reproduce(mae,pai)
     m = garante_vivo(m)
     return m
