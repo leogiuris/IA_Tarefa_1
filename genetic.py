@@ -2,8 +2,6 @@ import numpy as np
 from random import random, randint, randrange, choices
 from copy import deepcopy
 
-from lais_mc import best_individual
-
  ##### VARIÁVEIS GLOBAIS
 NUM_LINES = 31
 NUM_COLUMNS = 7
