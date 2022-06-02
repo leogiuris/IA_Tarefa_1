@@ -4,8 +4,9 @@ import pygame
 
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
-WINDOW_HEIGHT = 800
-WINDOW_WIDTH = 400
+GREEN = (0, 0, 255)
+WINDOW_HEIGHT = 700
+WINDOW_WIDTH = 1200
 
 def GetMap():
     mapChar = []
@@ -36,11 +37,11 @@ def pontos_get_map(map):
 
 def drawGrid():
     #blockSizex = 5 #Set the size of the grid block
-    blockSize = 1
+    blockSize = 4
     mapChar = GetMap()
-    for y in range(0, len(mapChar), blockSize): 
-       for x in range(0, len(mapChar[y]), blockSize):
-            rect = pygame.Rect(x, y, blockSize, blockSize)
+    for y in range(0, len(mapChar), 1): 
+       for x in range(0, len(mapChar[y]), 1):
+            rect = pygame.Rect(x*blockSize, y*blockSize*2, blockSize, blockSize*2)
             if mapChar[y][x] == 'M':
                 pygame.Surface.fill(display, (255,248,220), rect, 1)
             elif mapChar[y][x] == 'F':
@@ -55,18 +56,28 @@ def drawGrid():
                 pygame.Surface.fill(display, (1,0,0), rect, 1)
 
 
+def drawPath(path):
+    blockSize = 4
 
-def main_display():
+    for block in path:
+        rect = pygame.Rect(block[0]*blockSize, block[1]*blockSize*2, blockSize, blockSize*2)
+        pygame.Surface.fill(display, (255, 0, 220), rect, 1)
+    
+
+
+def RunView(path):
     global display
     pygame.init()
-    display = pygame.display.set_mode((WINDOW_HEIGHT, WINDOW_WIDTH))
-    display.fill((200,200,200))
+    display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    display.fill(BLACK)
     open =True
     while open:
         drawGrid()
+        drawPath(path)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 open=False
                 pygame.quit()
                 quit()
         pygame.display.update()
+
