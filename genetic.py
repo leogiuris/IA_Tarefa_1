@@ -1,7 +1,6 @@
 import numpy as np
 from random import random, randint, randrange, choices
 from copy import deepcopy
-from main import etapa_dif, personagem_agilidade, NUM_LINES, NUM_COLUMNS, ENERGY
 
 # VARIAVEIS GLOBAIS QUE DEPENDEM DO PROBLEMA DADO
 etapa_dif = []
