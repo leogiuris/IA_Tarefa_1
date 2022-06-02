@@ -1,16 +1,19 @@
 import numpy as np
 from random import random, randint, randrange, choices
 from copy import deepcopy
+from main import etapa_dif, personagem_agilidade, NUM_LINES, NUM_COLUMNS, ENERGY
 
- ##### VARIÁVEIS GLOBAIS
-NUM_LINES = 31
-NUM_COLUMNS = 7
-ENERGY = 8
-MAX_POPULATION = 1500 ## 2000 roudou
-etapa_dif = [] #1823.960333872418 em 11 min 34
+# VARIAVEIS GLOBAIS QUE DEPENDEM DO PROBLEMA DADO
+etapa_dif = []
 for i in range(1,32):
     etapa_dif.append(10*i)
 personagem_agilidade = [1.8, 1.6, 1.6, 1.6, 1.4, 0.9, 0.7]
+NUM_LINES = len(etapa_dif)
+NUM_COLUMNS = len(personagem_agilidade)
+ENERGY = 8
+
+##### VARIÁVEIS GLOBAIS DA SOL
+MAX_POPULATION = 1500
 REPETITION = 50
 BEST = 20
 
@@ -235,15 +238,6 @@ def genetic_algorithm(population, BEST, REPETITION):
         iter += 1    
     return population[0]
 
-## rodando código
-population = initial_population(500)
-best_individual = genetic_algorithm(population, BEST, REPETITION)
-print("Melhor tempo", best_individual[1])
-
-file = open('combinatoria.txt', 'w')
-for row in best_individual[0]:
-    np.savetxt(file, row)
-file.close()
 
 # (BEST, MAX_POPULATION) = (1500, 20) -> Melhor tempo: 1827.6555928873704, rodando em 13min34s
 

@@ -1,5 +1,7 @@
 from astar import positions_etapas, astar, TIME
 from interface import GetMap, RunView
+from genetic import initial_population, genetic_algorithm, BEST, REPETITION
+import numpy as np
 
 def main():
     totalPath = []
@@ -11,7 +13,7 @@ def main():
                     'W', 'X', 'Y', 'Z']
     num_etapas = len(check_etapas)
     check_points = positions_etapas(map, check_etapas, num_etapas)
-
+    
     for i in range(num_etapas - 1):
         path = astar(map, check_points[i], check_points[i+1])
         totalPath.append(path)
@@ -21,6 +23,17 @@ def main():
     print(TIME)
     print(totalPath)
     RunView(totalPath)
+
+    ## rodando geneticO
+
+    population = initial_population(500)
+    best_individual = genetic_algorithm(population, BEST, REPETITION)
+    print("Melhor tempo", best_individual[1])
+
+    file = open('combinatoria.txt', 'w')
+    for row in best_individual[0]:
+        np.savetxt(file, row)
+    file.close()
 
 if __name__ == '__main__':
     main()
