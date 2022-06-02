@@ -1,4 +1,3 @@
-import time
 import pygame
 
 BLACK = (  0,   0,   0)
@@ -24,22 +23,6 @@ def GetMap():
             lista.append(char)
         mapChar.append(lista)
     return mapChar
-
-def pontos_get_map(map):
-    lista = []
-    soma = 0
-    for y in range(len(map)):
-        for x in range(len(map[y])):
-            count  = 0
-            for i in ['M', 'F', '.', 'A', 'R']:
-                if (map[y][x] == i):
-                    count = 1
-            if count == 0:
-                lista.append(map[y][x])
-            if map[y][x] == '\n':
-                soma +=1
-    print('soma ', soma)
-    return lista
 
 def drawGrid():
     blockSize = 4
