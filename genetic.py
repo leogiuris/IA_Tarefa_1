@@ -155,6 +155,28 @@ def repetition(population, potential_child):
             return 0
     return -1
 
+def swap_line(person):
+    # swap de dois personagens (colunas) da matriz person
+    new_person = deepcopy(person)
+    s1 = randrange(NUM_LINES)
+    s2 = s1
+    while s2 == s1:
+        s2 = randrange(NUM_LINES)
+    for p1 in range(NUM_COLUMNS):
+        # for p2 in range(p1, NUM_COLUMNS):
+            swaped = deepcopy(new_person[0])
+            swaped[s1][p1] = new_person[0][s1][p2]
+            swaped[s1][p2] = new_person[0][s1][p1]
+            swaped[s2][p2] = new_person[0][s2][p1]
+            swaped[s2][p1] = new_person[0][s2][p2]
+            if checa_vazio(swaped) == -1 and checa_vivo(swaped)==-1:
+                swaped = garante_vivo(swaped)
+                tempo_swaped = custo_tempo(swaped)
+                if tempo_swaped < new_person[1]:
+                    new_person = (swaped, tempo_swaped)
+    return new_person
+     
+
 def reproduce(parent1, parent2):
     childs = []
     child1 = np.zeros((NUM_LINES, NUM_COLUMNS))
@@ -208,6 +230,7 @@ def genetic_algorithm(population, BEST, REPETITION):
             childs = reproduce(parents[0][0], parents[1][0])
             for child in childs:
                 child = mutation(child)   # probabilidade de mutação é 0.3     
+                child = swap_line(child)
                 if repetition(new_population, child) == -1: # sem repetição
                     tempo_child = custo_tempo(child)
                     new_population.append((child, tempo_child))
