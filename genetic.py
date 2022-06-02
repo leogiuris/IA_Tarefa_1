@@ -12,7 +12,7 @@ NUM_COLUMNS = len(personagem_agilidade)
 ENERGY = 8
 
 ##### VARIÁVEIS GLOBAIS DA SOL
-MAX_POPULATION = 1500
+MAX_POPULATION = 3000
 REPETITION = 50
 BEST = 20
 
@@ -121,7 +121,7 @@ def die(population, max, BEST):
         times.pop(index_times)
 
 
-def mutation(person, probability = 0.3):
+def mutation(person, probability = 0.45):
     if random() < probability:
         kshift = randrange(NUM_LINES)
         person = np.roll(person, NUM_COLUMNS*kshift) # dá um k-shift nas linhas para cima
@@ -141,7 +141,7 @@ def swap(person):
             swaped[s1][p2] = new_person[0][s1][p1]
             swaped[s2][p2] = new_person[0][s2][p1]
             swaped[s2][p1] = new_person[0][s2][p2]
-            if checa_vazio(swaped) == -1 and checa_vivo(swaped)==-1:
+            if checa_vazio(swaped) == -1 and checa_vivo(swaped) == -1:
                 swaped = garante_vivo(swaped)
                 tempo_swaped = custo_tempo(swaped)
                 if tempo_swaped < new_person[1]:
@@ -156,24 +156,22 @@ def repetition(population, potential_child):
     return -1
 
 def swap_line(person):
-    # swap de dois personagens (colunas) da matriz person
+    # swap de dois personagens (colunas) da matriz person[0]
+    # person = (matriz, tempo)
     new_person = deepcopy(person)
     s1 = randrange(NUM_LINES)
     s2 = s1
     while s2 == s1:
         s2 = randrange(NUM_LINES)
+    swaped = deepcopy(new_person[0])
     for p1 in range(NUM_COLUMNS):
-        # for p2 in range(p1, NUM_COLUMNS):
-            swaped = deepcopy(new_person[0])
-            swaped[s1][p1] = new_person[0][s1][p2]
-            swaped[s1][p2] = new_person[0][s1][p1]
-            swaped[s2][p2] = new_person[0][s2][p1]
-            swaped[s2][p1] = new_person[0][s2][p2]
-            if checa_vazio(swaped) == -1 and checa_vivo(swaped)==-1:
-                swaped = garante_vivo(swaped)
-                tempo_swaped = custo_tempo(swaped)
-                if tempo_swaped < new_person[1]:
-                    new_person = (swaped, tempo_swaped)
+        swaped[s1][p1] = new_person[0][s2][p1]
+        swaped[s2][p1] = new_person[0][s1][p1]
+
+
+    tempo_swaped = custo_tempo(swaped)
+    if tempo_swaped < new_person[1]:
+        new_person = (swaped, tempo_swaped)
     return new_person
      
 
@@ -223,17 +221,19 @@ def genetic_algorithm(population, BEST, REPETITION):
         print('iter', iter)
         print('count_stop', count_stop)
         # população já está ordenada
-        new_population = population[0:500] # mantém melhores 500 habitantes
+        new_population = population[0:1000] # mantém melhores 1000 habitantes
         # new_population = population
         for i in range(len(population)//2): 
             parents = random_selection_pair(population) # [(person1, time1), (person2, time2)]
             childs = reproduce(parents[0][0], parents[1][0])
             for child in childs:
                 child = mutation(child)   # probabilidade de mutação é 0.3     
-                child = swap_line(child)
+                
                 if repetition(new_population, child) == -1: # sem repetição
                     tempo_child = custo_tempo(child)
-                    new_population.append((child, tempo_child))
+                    child = (child, tempo_child)
+                    child = swap_line(child) # depois de comentário de baffa - diminui tempo
+                    new_population.append(child)
 
         population = new_population # atualiza população
 

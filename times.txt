@@ -1,0 +1,4 @@
+INITIAL POPULATION = 1500
+BEST = 20
+REPETITION = 50
+Using swap_line for child: 1824.7392640631133 in 24min 29.3s
