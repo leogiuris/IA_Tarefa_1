@@ -43,37 +43,43 @@ def drawGrid():
        for x in range(0, len(mapChar[y]), 1):
             rect = pygame.Rect(x*blockSize, y*blockSize*2, blockSize, blockSize*2)
             if mapChar[y][x] == 'M':
-                pygame.Surface.fill(display, (255,248,220), rect, 1)
+                pygame.Surface.fill(display, (255,248,220), rect)
             elif mapChar[y][x] == 'F':
-                pygame.Surface.fill(display, (0,10,0), rect, 1) 
+                pygame.Surface.fill(display, (0,255,0), rect) 
             elif mapChar[y][x] == '.':
-                pygame.Surface.fill(display, (1,1,1), rect, 1)
+                pygame.Surface.fill(display, (255,255,255), rect)
             elif mapChar[y][x] == 'A':
-                pygame.Surface.fill(display, (0,0,1), rect, 1)
+                pygame.Surface.fill(display, (0,0,255), rect)
             elif mapChar[y][x] == 'R':
-                pygame.Surface.fill(display, (0,0,0), rect, 1)
+                pygame.Surface.fill(display, (0,0,0), rect)
             else:
-                pygame.Surface.fill(display, (1,0,0), rect, 1)
+                pygame.Surface.fill(display, (255,0,0), rect)
 
 
 def drawPath(path):
     blockSize = 4
 
-    for block in path:
-        rect = pygame.Rect(block[0]*blockSize, block[1]*blockSize*2, blockSize, blockSize*2)
-        pygame.Surface.fill(display, (255, 0, 220), rect, 1)
+    for etapa in path:
+        pygame.display.update()
+        for node in etapa:
+            print(node)
+            rect = pygame.Rect(node[0]*blockSize, node[1]*blockSize*2, blockSize, blockSize*2)
+            pygame.Surface.fill(display, (255, 0, 220), rect)
     
 
 
 def RunView(path):
     global display
+    drawn = False
     pygame.init()
     display = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     display.fill(BLACK)
     open =True
     while open:
-        drawGrid()
-        drawPath(path)
+        if not drawn:
+            drawGrid()
+            drawPath(path)
+            drawn = True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 open=False

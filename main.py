@@ -5,7 +5,7 @@ from jogo import *
 
 
 def main():
-    
+
     totalPath = []
 
     map = GetMap()
@@ -29,6 +29,7 @@ def main():
 
     print(TIME)
 
+    print(totalPath)
     RunView(totalPath)
 
 if __name__ == '__main__':
