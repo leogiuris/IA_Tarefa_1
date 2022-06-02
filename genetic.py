@@ -240,6 +240,11 @@ population = initial_population(500)
 best_individual = genetic_algorithm(population, BEST, REPETITION)
 print("Melhor tempo", best_individual[1])
 
+file = open('combinatoria.txt', 'w')
+for row in best_individual[0]:
+    np.savetxt(file, row)
+file.close()
+
 # (BEST, MAX_POPULATION) = (1500, 20) -> Melhor tempo: 1827.6555928873704, rodando em 13min34s
 
 # die_optimal está matando mais indivíduos que o excesso
