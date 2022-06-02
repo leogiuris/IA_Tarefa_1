@@ -1,4 +1,4 @@
-
+import time
 
 import pygame
 
@@ -7,6 +7,8 @@ WHITE = (200, 200, 200)
 GREEN = (0, 0, 255)
 WINDOW_HEIGHT = 700
 WINDOW_WIDTH = 1200
+
+
 
 def GetMap():
     mapChar = []
@@ -18,6 +20,8 @@ def GetMap():
             lista.append(char)
         mapChar.append(lista)
     return mapChar
+
+
 
 def pontos_get_map(map):
     lista = []
@@ -35,15 +39,17 @@ def pontos_get_map(map):
     print('soma ', soma)
     return lista
 
+
+
 def drawGrid():
     #blockSizex = 5 #Set the size of the grid block
     blockSize = 4
     mapChar = GetMap()
-    for y in range(0, len(mapChar), 1): 
-       for x in range(0, len(mapChar[y]), 1):
+    for y in range(0, len(mapChar)): 
+       for x in range(0, len(mapChar[y])):
             rect = pygame.Rect(x*blockSize, y*blockSize*2, blockSize, blockSize*2)
             if mapChar[y][x] == 'M':
-                pygame.Surface.fill(display, (255,248,220), rect)
+                pygame.Surface.fill(display, (150,75,0), rect)
             elif mapChar[y][x] == 'F':
                 pygame.Surface.fill(display, (0,255,0), rect) 
             elif mapChar[y][x] == '.':
@@ -56,15 +62,17 @@ def drawGrid():
                 pygame.Surface.fill(display, (255,0,0), rect)
 
 
+
 def drawPath(path):
     blockSize = 4
 
     for etapa in path:
-        pygame.display.update()
+        
         for node in etapa:
             print(node)
             rect = pygame.Rect(node[0]*blockSize, node[1]*blockSize*2, blockSize, blockSize*2)
             pygame.Surface.fill(display, (255, 0, 220), rect)
+            pygame.display.update()
     
 
 
@@ -80,6 +88,7 @@ def RunView(path):
             drawGrid()
             drawPath(path)
             drawn = True
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 open=False
