@@ -2,6 +2,8 @@ import numpy as np
 from random import random, randint, randrange, choices
 from copy import deepcopy
 
+from lais_mc import best_individual
+
  ##### VARIÁVEIS GLOBAIS
 NUM_LINES = 31
 NUM_COLUMNS = 7
@@ -253,3 +255,10 @@ def genetic_algorithm(population, BEST, REPETITION):
         print('best_time', best_time)
         iter += 1    
     return population[0]
+
+## rodando código
+population = initial_population(500)
+best_individual = genetic_algorithm(population, BEST, REPETITION)
+print("Melhor tempo", best_individual[1])
+
+# (BEST, MAX_POPULATION) = (1500, 20) -> Melhor tempo: 1827.6555928873704, rodando em 13min34s
