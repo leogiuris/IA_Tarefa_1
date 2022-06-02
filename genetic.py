@@ -221,7 +221,7 @@ def genetic_algorithm(population, BEST, REPETITION):
         print('iter', iter)
         print('count_stop', count_stop)
         # população já está ordenada
-        new_population = population[0:1000] # mantém melhores 1000 habitantes
+        new_population = population[0:500] # mantém melhores 1000 habitantes
         # new_population = population
         for i in range(len(population)//2): 
             parents = random_selection_pair(population) # [(person1, time1), (person2, time2)]
