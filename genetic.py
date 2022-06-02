@@ -238,7 +238,7 @@ def genetic_algorithm(population, BEST, REPETITION):
     return population[0]
 
 
-# (BEST, MAX_POPULATION) = (1500, 20) -> Melhor tempo: 1827.6555928873704, rodando em 13min34s
+# (BEST, MAX_POPULATION) = (1500, 20) -> Melhor tempo: 1827.1628617108156, rodando em 12min29.1s
 
 # die_optimal está matando mais indivíduos que o excesso
 # def die_optimal(population, max, BEST):
