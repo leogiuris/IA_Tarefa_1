@@ -1,5 +1,5 @@
 from astar import positions_etapas, astar, TIME
-from jogo import GetMap, RunView
+from interface import GetMap, RunView
 
 def main():
     totalPath = []
