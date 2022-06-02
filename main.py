@@ -24,7 +24,7 @@ def main():
     print(totalPath)
     RunView(totalPath)
 
-    ## rodando geneticO
+    ## rodando genetico
 
     population = initial_population(500)
     best_individual = genetic_algorithm(population, BEST, REPETITION)
@@ -32,7 +32,9 @@ def main():
 
     file = open('combinatoria.txt', 'w')
     for row in best_individual[0]:
-        np.savetxt(file, row)
+        for elem in row:
+            np.savetxt(file, elem+' ')
+        file.write('\n')
     file.close()
 
 if __name__ == '__main__':

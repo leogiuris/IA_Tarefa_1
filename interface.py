@@ -9,9 +9,9 @@ PINK  = (255,   0, 220)
 RED   = (255,   0,   0)
 WHITE = (255, 255, 255)
 
-WINDOW_HEIGHT = 700
+WINDOW_HEIGHT = 800
 WINDOW_WIDTH = 1200
-WINDOW_DIMENSIONS = (WINDOW_HEIGHT, WINDOW_WIDTH)
+WINDOW_DIMENSIONS = (WINDOW_WIDTH, WINDOW_HEIGHT)
 
 def GetMap():
     mapChar = []
@@ -48,7 +48,6 @@ def drawPath(path):
 
     for etapa in path:
         for node in etapa:
-            print(node)
             rect = pygame.Rect(node[1]*blockSize, node[0]*blockSize*2, blockSize, blockSize*2)
             pygame.Surface.fill(display, PINK, rect)
             pygame.display.update()
