@@ -66,7 +66,7 @@ def drawPath(path):
     for etapa in path:
         for node in etapa:
             print(node)
-            rect = pygame.Rect(node[0]*blockSize, node[1]*blockSize*2, blockSize, blockSize*2)
+            rect = pygame.Rect(node[1]*blockSize, node[0]*blockSize*2, blockSize, blockSize*2)
             pygame.Surface.fill(display, PINK, rect)
             pygame.display.update()
     
